@@ -226,6 +226,8 @@
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
+            "axisSoftMax": 10,
+            "axisSoftMin": 0,
             "barAlignment": 0,
             "drawStyle": "line",
             "fillOpacity": 0,
@@ -326,6 +328,6 @@
   "timezone": "",
   "title": "AP Sensor Data",
   "uid": "fa9bcc43-7171-4d0e-8c10-e2ab978a391e",
-  "version": 6,
+  "version": 4,
   "weekStart": ""
 }

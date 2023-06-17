@@ -51,7 +51,8 @@ services:
     volumes:
       - ./telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:rw
     ports:
-      - "57000:57000", "${INFLUX_PORT}:${INFLUX_PORT}"
+      - "57000:57000"
+      - "${INFLUX_PORT}:${INFLUX_PORT}"
     env_file:
       - .env
     depends_on:

@@ -23,10 +23,7 @@
   "liveNow": false,
   "panels": [
     {
-      "datasource": {
-        "type": "influxdb",
-        "uid": "bd98ca26-dcbc-4937-a01a-f4c6b3e3e385"
-      },
+      "datasource": "InfluxDB",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -113,10 +110,7 @@
       },
       "targets": [
         {
-          "datasource": {
-            "type": "influxdb",
-            "uid": "bd98ca26-dcbc-4937-a01a-f4c6b3e3e385"
-          },
+          "datasource": "InfluxDB",
           "query": "from(bucket: \"sensordata\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"Cisco-IOS-XE-wireless-access-point-oper:access-point-oper-data/ap-temp\" or r[\"_measurement\"] == \"Cisco-IOS-XE-wireless-access-point-oper:access-point-oper-data/ap-air-quality\")\n  |> filter(fn: (r) => r[\"_field\"] == \"temp\")\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\n  |> yield(name: \"last\")",
           "refId": "A"
         }
@@ -125,10 +119,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "influxdb",
-        "uid": "bd98ca26-dcbc-4937-a01a-f4c6b3e3e385"
-      },
+      "datasource": "InfluxDB",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -215,10 +206,7 @@
       },
       "targets": [
         {
-          "datasource": {
-            "type": "influxdb",
-            "uid": "bd98ca26-dcbc-4937-a01a-f4c6b3e3e385"
-          },
+          "datasource": "InfluxDB",
           "query": "from(bucket: \"sensordata\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"Cisco-IOS-XE-wireless-access-point-oper:access-point-oper-data/ap-temp\" or r[\"_measurement\"] == \"Cisco-IOS-XE-wireless-access-point-oper:access-point-oper-data/ap-air-quality\")\n  |> filter(fn: (r) => r[\"_field\"] == \"humidity\")\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\n  |> yield(name: \"last\")",
           "refId": "A"
         }
@@ -227,10 +215,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "influxdb",
-        "uid": "bd98ca26-dcbc-4937-a01a-f4c6b3e3e385"
-      },
+      "datasource": "InfluxDB",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -317,10 +302,7 @@
       },
       "targets": [
         {
-          "datasource": {
-            "type": "influxdb",
-            "uid": "bd98ca26-dcbc-4937-a01a-f4c6b3e3e385"
-          },
+          "datasource": "InfluxDB",
           "query": "from(bucket: \"sensordata\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"Cisco-IOS-XE-wireless-access-point-oper:access-point-oper-data/ap-temp\" or r[\"_measurement\"] == \"Cisco-IOS-XE-wireless-access-point-oper:access-point-oper-data/ap-air-quality\")\n  |> filter(fn: (r) => r[\"_field\"] == \"tvoc\")\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\n  |> yield(name: \"last\")",
           "refId": "A"
         }

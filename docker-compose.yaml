@@ -56,5 +56,7 @@ services:
       - .env
     depends_on:
       - influxdb
+    networks:
+      - webnet
 networks:
   webnet:

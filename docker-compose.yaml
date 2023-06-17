@@ -50,6 +50,8 @@ services:
     image: telegraf
     volumes:
       - ./telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:rw
+    ports:
+      - "57000:57000"
     env_file:
       - .env
     depends_on:

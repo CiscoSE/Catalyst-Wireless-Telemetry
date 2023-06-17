@@ -38,7 +38,7 @@ This code has been developed and tested with Python 3.8.
  build all images of the container:
    ```
     cd Catalyst-Wireless-Telemetry/
-    docker-compose build
+    docker compose build
    ```
    
 3. _[Optional]_ If you wish to edit any settings, please edit the .env file.
@@ -47,7 +47,7 @@ This code has been developed and tested with Python 3.8.
 4. Start all the containers in the background (-d). Grafana and InfluxDB will 
    be automatically configured. 
    ```
-    docker-compose up -d
+    docker compose up -d
    ```
    
    **Note:** there is a container named _influxdb_cli_ that just needs to run 
@@ -73,7 +73,7 @@ This code has been developed and tested with Python 3.8.
    You should be able to access it and it **will be empty**.
 
 7. Now you shall configure the Catalyst 9800 Wireless LAN Controller (WLC) in order
-   to send the data to telegraf. Access the WLC CLI and configure the ap profile:
+   to collect the AP sensor data. Access the WLC CLI and configure the ap profile:
    ```
     ap profile default-ap-profile
      description "Default AP Profile for IOS-XE"
@@ -85,17 +85,38 @@ This code has been developed and tested with Python 3.8.
    Further instructions on how to do so can be found in the 
    [Cisco Catalyst 9800 Series Wireless Controller Software Configuration Guide, 
    Cisco IOS XE Cupertino 17.9.x](https://www.cisco.com/c/en/us/td/docs/wireless/controller/9800/17-9/config-guide/b_wl_17_9_cg/m_environmental_sensors_on_aps.html?bookSearch=true).
-       
+
+8. The data must be sent to telegraf, to do so the WLC uses streaming telemetry. Configure
+   the following subscriptions:
+   ```
+   telemetry ietf subscription 20
+    encoding encode-kvgpb
+    filter xpath /wireless-access-point-oper:access-point-oper-data/ap-temp
+    source-address x.y.x.w
+    stream yang-push
+    update-policy periodic 5000
+    receiver ip address a.b.c.d 57000 protocol grpc-tcp
+   telemetry ietf subscription 21
+    encoding encode-kvgpb
+    filter xpath /wireless-access-point-oper:access-point-oper-data/ap-air-quality
+    source-address x.y.x.w
+    stream yang-push
+    update-policy periodic 5000
+    receiver ip address a.b.c.d 57000 protocol grpc-tcp
+   ```
+   Replace `x.y.x.w` with the IP address of the WLC. Replace `a.b.c.d` with the IP address
+   of the machine running telegraf. Ensure that there's no firewall in between blocking the port.
+    
 ### Cleanup
 
 You can bring down all containers in this sample app with:
 ```
-   docker-compose down
+   docker compose down
 ```
 
 To make sure they're gone, check with:
 ```
-   docker-compose ps
+   docker compose ps
 ```
 
 ## License

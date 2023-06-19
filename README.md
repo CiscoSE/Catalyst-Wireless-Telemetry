@@ -86,26 +86,36 @@ This code has been developed and tested with Python 3.8.
    [Cisco Catalyst 9800 Series Wireless Controller Software Configuration Guide, 
    Cisco IOS XE Cupertino 17.9.x](https://www.cisco.com/c/en/us/td/docs/wireless/controller/9800/17-9/config-guide/b_wl_17_9_cg/m_environmental_sensors_on_aps.html?bookSearch=true).
 
-8. The data must be sent to telegraf, to do so the WLC uses streaming telemetry. Configure
+8. The data must be sent from the WLC to telegraf, to do so the WLC uses streaming telemetry. Configure
    the following subscriptions:
    ```
    telemetry ietf subscription 20
     encoding encode-kvgpb
     filter xpath /wireless-access-point-oper:access-point-oper-data/ap-temp
-    source-address x.y.x.w
+    source-address w.x.y.z
     stream yang-push
     update-policy periodic 5000
     receiver ip address a.b.c.d 57000 protocol grpc-tcp
    telemetry ietf subscription 21
     encoding encode-kvgpb
     filter xpath /wireless-access-point-oper:access-point-oper-data/ap-air-quality
-    source-address x.y.x.w
+    source-address w.x.y.z
     stream yang-push
     update-policy periodic 5000
     receiver ip address a.b.c.d 57000 protocol grpc-tcp
+   telemetry ietf subscription 22
+    encoding encode-kvgpb
+    filter xpath /wireless-access-point-oper:access-point-oper-data/ap-name-mac-map
+    source-address w.x.y.z
+    stream yang-push
+    update-policy periodic 5000
+    receiver ip address ab.c.d 57000 protocol grpc-tcp
    ```
-   Replace `x.y.x.w` with the IP address of the WLC. Replace `a.b.c.d` with the IP address
-   of the machine running telegraf. Ensure that there's no firewall in between blocking the port.
+   Replace `w.x.y.z` with the IP address of the WLC. Replace `a.b.c.d` with the IP address
+   of the machine running telegraf. Ensure that there's no firewall in between blocking the port 57000.
+   
+   The subscription numbers are irrelevant as long as they don't overlap. The last subscription
+   sends the corresponding hostnames for each ap mac address allowing for a nicer print.
     
 ### Cleanup
 

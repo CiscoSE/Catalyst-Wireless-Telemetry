@@ -83,7 +83,7 @@
             "properties": [
               {
                 "id": "displayName",
-                "value": "${__field.labels.ap_mac}"
+                "value": "${__field.labels.ap_name}"
               }
             ]
           }
@@ -95,7 +95,7 @@
         "x": 0,
         "y": 0
       },
-      "id": 1,
+      "id": 4,
       "options": {
         "legend": {
           "calcs": [],
@@ -111,7 +111,7 @@
       "targets": [
         {
           "datasource": "InfluxDB",
-          "query": "from(bucket: \"sensordata\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"Cisco-IOS-XE-wireless-access-point-oper:access-point-oper-data/ap-temp\" or r[\"_measurement\"] == \"Cisco-IOS-XE-wireless-access-point-oper:access-point-oper-data/ap-air-quality\")\n  |> filter(fn: (r) => r[\"_field\"] == \"temp\")\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\n  |> yield(name: \"last\")",
+          "query": "import \"join\"\n\nleft = from(bucket: \"sensordata\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"Cisco-IOS-XE-wireless-access-point-oper:access-point-oper-data/ap-temp\")\n  |> filter(fn: (r) => r[\"_field\"] == \"temp\")\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\n  |> group()\n  //|> yield(name: \"temperature_table\")\n\nright = from(bucket: \"sensordata\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"Cisco-IOS-XE-wireless-access-point-oper:access-point-oper-data/ap-name-mac-map\")\n  |> filter(fn: (r) => r[\"_field\"] == \"wtp_mac\")\n  |> unique()\n  |> group()\n  //|> yield(name: \"ap_name_mac_table\")\n\nall = join.inner(\n  left: left,\n  right: right,\n  on: (l, r) => l.ap_mac == r._value,\n  as: (l, r) => ({l with _value: l._value, ap_name: r.wtp_name}),\n)\n  |> group(columns: [\"_value\", \"_time\"], mode: \"except\")\n  |> yield(name: \"data\")\n",
           "refId": "A"
         }
       ],
@@ -179,7 +179,7 @@
             "properties": [
               {
                 "id": "displayName",
-                "value": "${__field.labels.ap_mac}"
+                "value": "${__field.labels.ap_name}"
               }
             ]
           }
@@ -207,7 +207,7 @@
       "targets": [
         {
           "datasource": "InfluxDB",
-          "query": "from(bucket: \"sensordata\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"Cisco-IOS-XE-wireless-access-point-oper:access-point-oper-data/ap-temp\" or r[\"_measurement\"] == \"Cisco-IOS-XE-wireless-access-point-oper:access-point-oper-data/ap-air-quality\")\n  |> filter(fn: (r) => r[\"_field\"] == \"humidity\")\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\n  |> yield(name: \"last\")",
+          "query": "import \"join\"\n\nleft = from(bucket: \"sensordata\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"Cisco-IOS-XE-wireless-access-point-oper:access-point-oper-data/ap-temp\" or r[\"_measurement\"] == \"Cisco-IOS-XE-wireless-access-point-oper:access-point-oper-data/ap-air-quality\")\n  |> filter(fn: (r) => r[\"_field\"] == \"humidity\")\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\n  |> group()\n  //|> yield(name: \"humidity_table\")\n\nright = from(bucket: \"sensordata\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"Cisco-IOS-XE-wireless-access-point-oper:access-point-oper-data/ap-name-mac-map\")\n  |> filter(fn: (r) => r[\"_field\"] == \"wtp_mac\")\n  |> unique()\n  |> group()\n  //|> yield(name: \"ap_name_mac_table\")\n\nall = join.inner(\n  left: left,\n  right: right,\n  on: (l, r) => l.ap_mac == r._value,\n  as: (l, r) => ({l with _value: l._value, ap_name: r.wtp_name}),\n)\n  |> group(columns: [\"_value\", \"_time\"], mode: \"except\")\n  |> yield(name: \"data\")\n",
           "refId": "A"
         }
       ],
@@ -277,7 +277,7 @@
             "properties": [
               {
                 "id": "displayName",
-                "value": "${__field.labels.ap_mac}"
+                "value": "${__field.labels.ap_name}"
               }
             ]
           }
@@ -305,7 +305,7 @@
       "targets": [
         {
           "datasource": "InfluxDB",
-          "query": "from(bucket: \"sensordata\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"Cisco-IOS-XE-wireless-access-point-oper:access-point-oper-data/ap-temp\" or r[\"_measurement\"] == \"Cisco-IOS-XE-wireless-access-point-oper:access-point-oper-data/ap-air-quality\")\n  |> filter(fn: (r) => r[\"_field\"] == \"tvoc\")\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\n  |> yield(name: \"last\")",
+          "query": "import \"join\"\n\nleft = from(bucket: \"sensordata\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"Cisco-IOS-XE-wireless-access-point-oper:access-point-oper-data/ap-temp\" or r[\"_measurement\"] == \"Cisco-IOS-XE-wireless-access-point-oper:access-point-oper-data/ap-air-quality\")\n  |> filter(fn: (r) => r[\"_field\"] == \"tvoc\")\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\n  |> group()\n  //|> yield(name: \"tvoc_table\")\n\nright = from(bucket: \"sensordata\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"Cisco-IOS-XE-wireless-access-point-oper:access-point-oper-data/ap-name-mac-map\")\n  |> filter(fn: (r) => r[\"_field\"] == \"wtp_mac\")\n  |> unique()\n  |> group()\n  //|> yield(name: \"ap_name_mac_table\")\n\nall = join.inner(\n  left: left,\n  right: right,\n  on: (l, r) => l.ap_mac == r._value,\n  as: (l, r) => ({l with _value: l._value, ap_name: r.wtp_name}),\n)\n  |> group(columns: [\"_value\", \"_time\"], mode: \"except\")\n  |> yield(name: \"data\")\n",
           "refId": "A"
         }
       ],
@@ -313,7 +313,7 @@
       "type": "timeseries"
     }
   ],
-  "refresh": "",
+  "refresh": "10s",
   "schemaVersion": 38,
   "style": "dark",
   "tags": [],
@@ -328,6 +328,6 @@
   "timezone": "",
   "title": "AP Sensor Data",
   "uid": "fa9bcc43-7171-4d0e-8c10-e2ab978a391e",
-  "version": 4,
+  "version": 5,
   "weekStart": ""
 }

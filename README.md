@@ -15,7 +15,11 @@ It uses:
 
 ## Screenshots
 
-TODO: add screenshots
+Containers in steady state:
+![Containers in steady state](/images/ContainersSteady.png)
+
+AP Sensor Dashboard:
+![AP Sensor Dashboard](/images/APSensorDashboard.png)
 
 ## Instructions
 
